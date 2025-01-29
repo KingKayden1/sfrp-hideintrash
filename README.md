@@ -3,7 +3,7 @@
 SFRP-Hideintrash is a very unique script that I may work on more if it gets positive reviews. It is only a qb-target and qb-core compatible script so far but I play to make it compatible for ox_core and ESX in the near future
 
 - Edits are not allowed without giving credit to me
-- SFRP-Hideintrash Works By Using QB-Target On A Dumpster And Pressing [E] To Get Out
+- SFRP-Hideintrash Works By Using QB-Target Or OX_Target On A Dumpster And Pressing [E] To Get Out
 
 # How To Set Up
 - Download the zip file
