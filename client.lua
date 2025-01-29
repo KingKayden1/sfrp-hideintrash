@@ -3,21 +3,49 @@ local isInTrash = false
 local dumpsters = Config.Dumpster
 local originalCoords = nil 
 
-exports['qb-target']:AddTargetModel(dumpsters, {
-    options = {
-        {
-            type = "client",
-            event = "sfrp-hideintrash:client:enterTrash",
-            icon = "fas fa-trash",
-            label = "Hide in Trash",
-        },
-    },
-    distance = 2.5, 
-})
+CreateThread(function()
+    while GetResourceState("ox_target") ~= "started" do
+        Wait(500)
+    end
+
+    if Config.Target == 'qb' then
+        exports['qb-target']:AddTargetModel(dumpsters, {
+            options = {
+                {
+                    type = "client",
+                    event = "sfrp-hideintrash:client:enterTrash",
+                    icon = "fas fa-trash",
+                    label = "Hide in Trash",
+                },
+            },
+            distance = 2.5,
+        })
+    elseif Config.Target == 'ox' then
+        exports['ox_target']:addModel(dumpsters, {
+            options = {
+                {
+                    name = "hide",
+                    label = "Hide In Dumpster",
+                    icon = "fa-solid fa-trash",
+                    event = "sfrp-hideintrash:client:enterTrash",
+                    distance = 2.0,
+                }
+            }
+        })
+    end
+end)
 
 RegisterNetEvent('sfrp-hideintrash:client:enterTrash', function()
     if isInTrash then
-        TriggerEvent('QBCore:Notify', 'You are already hiding in the trash.', 'error')
+        if Config.Notify == 'qb' then
+            QBCore.Functions.Notify('You are already hiding in the trash.', 'error', 2500)
+        elseif Config.Notify == 'ox' then
+            exports.ox_lib:notify({
+                title = 'Dumpster',
+                description = 'You are already hiding in the trash.',
+                type = 'error'
+            })
+        end
         return
     end
 
@@ -35,11 +63,11 @@ RegisterNetEvent('sfrp-hideintrash:client:enterTrash', function()
 
     if closestDumpster then
         local dumpsterCoords = GetEntityCoords(closestDumpster)
-        local minDim, maxDim = GetModelDimensions(GetEntityModel(closestDumpster))
+        local minDim, _ = GetModelDimensions(GetEntityModel(closestDumpster)) 
         local centerCoords = vector3(
             dumpsterCoords.x,
             dumpsterCoords.y,
-            dumpsterCoords.z + minDim.z + 0.5
+            dumpsterCoords.z + minDim.z + 0.5 
         )
 
         originalCoords = playerCoords
@@ -48,35 +76,66 @@ RegisterNetEvent('sfrp-hideintrash:client:enterTrash', function()
         FreezeEntityPosition(playerPed, true)
         isInTrash = true
 
-        LoadAnimDict("amb@world_human_bum_slumped@male@laying_on_right_side@base")
-        TaskPlayAnim(playerPed, "amb@world_human_bum_slumped@male@laying_on_right_side@base", "base", 8.0, -8.0, -1, 1, 0, false, false, false)
+        LoadAnimDict(Config.Scenario)
+        TaskPlayAnim(playerPed, Config.Scenario, Config.ScenarioType, 8.0, -8.0, -1, 1, 0, false, false, false)
 
-        TriggerEvent('QBCore:Notify', 'You are hiding in the trash.', 'success')
+        if Config.Notify == 'qb' then
+            QBCore.Functions.Notify('You are hiding in the trash.', 'success')
+        elseif Config.Notify == 'ox' then
+            exports.ox_lib:notify({
+                title = 'Dumpster',
+                description = 'You are now hiding in the trash.',
+                type = 'success'
+            })
+        end
     else
-        TriggerEvent('QBCore:Notify', 'No nearby dumpster found!', 'error')
+        if Config.Notify == 'qb' then
+            QBCore.Functions.Notify('No nearby dumpster found!', 'error')
+        elseif Config.Notify == 'ox' then
+            exports.ox_lib:notify({
+                title = 'Dumpster',
+                description = 'No Nearby Dumpster Found',
+                type = 'error'
+            })
+        end
     end
 end)
 
 RegisterNetEvent('sfrp-hideintrash:client:exitTrash', function()
     if not isInTrash then
-        TriggerEvent('QBCore:Notify', 'You are not hiding in the trash.', 'error')
+        if Config.Notify == 'qb' then
+            QBCore.Functions.Notify('You are not hiding in the trash.', 'error')
+        elseif Config.Notify == 'ox' then
+            exports.ox_lib:notify({
+                title = 'Dumpster',
+                description = 'You are not hiding in the trash.',
+                type = 'error'
+            })
+        end
         return
     end
 
     local playerPed = PlayerPedId()
-
     SetEntityCoords(playerPed, originalCoords.x, originalCoords.y, originalCoords.z, false, false, false, true)
-    FreezeEntityPosition(playerPed, false) 
-    ClearPedTasksImmediately(playerPed) 
+    FreezeEntityPosition(playerPed, false)
+    ClearPedTasksImmediately(playerPed)
     isInTrash = false
 
-    TriggerEvent('QBCore:Notify', 'You got out of the trash.', 'success')
+    if Config.Notify == 'qb' then
+        QBCore.Functions.Notify('You got out of the trash.', 'success')
+    elseif Config.Notify == 'ox' then
+        exports.ox_lib:notify({
+            title = 'Dumpster',
+            description = 'You exited the dumpster.',
+            type = 'success'
+        })
+    end
 end)
 
 CreateThread(function()
     while true do
         Wait(0)
-        if isInTrash and IsControlJustReleased(0, 38) then 
+        if isInTrash and IsControlJustReleased(0, 38) then
             TriggerEvent('sfrp-hideintrash:client:exitTrash')
         end
     end
