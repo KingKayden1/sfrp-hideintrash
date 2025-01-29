@@ -5,6 +5,8 @@ SFRP-Hideintrash is a very unique script that I may work on more if it gets posi
 - Edits are not allowed without giving credit to me
 - SFRP-Hideintrash Works By Using QB-Target Or OX_Target On A Dumpster And Pressing [E] To Get Out
 
+- ![Screenshot 2025-01-28 235001](https://github.com/user-attachments/assets/11e93492-a7a7-41f0-8426-ec40d6ed811c)
+
 # How To Set Up
 - Download the zip file
 - Unzip the .zip file
