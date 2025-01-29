@@ -8,18 +8,21 @@ Config.Dumpster = {
     `prop_dumpster_4b`,
 }
 
+Config.Target = 'qb' -- qb or ox
+
+Config.Notify = 'qb'  -- qb or ox
+
+
+------------------------------------------------------------- ONLY TOUCH IF YOU KNOW WHAT YOURE DOING
+
+--   https://forge.plebmasters.de/animations/anim@amb@nightclub@lazlow@lo_alone@@lowalone_base_laz?ped=A_F_Y_Beach_01
+Config.Scenario = 'anim@amb@nightclub@lazlow@lo_alone@'
+Config.ScenarioType = 'lowalone_base_laz'
 
 
 -----------------------------------     What Im Working On 
+
 --[[
-
-Config.Notify ?
-
-Config.Framework ?
-
-Config.Scenario ?
-
-----------------------------------
 
 Better way to get out of the dumpster
 
