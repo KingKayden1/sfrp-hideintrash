@@ -2,38 +2,30 @@ local QBCore = exports['qb-core']:GetCoreObject()
 local isInTrash = false
 local dumpsters = Config.Dumpster
 local originalCoords = nil 
+local ox_target = exports.ox_target
 
-CreateThread(function()
-    while GetResourceState("ox_target") ~= "started" do
-        Wait(500)
-    end
-
-    if Config.Target == 'qb' then
-        exports['qb-target']:AddTargetModel(dumpsters, {
-            options = {
-                {
-                    type = "client",
-                    event = "sfrp-hideintrash:client:enterTrash",
-                    icon = "fas fa-trash",
-                    label = "Hide in Trash",
-                },
+if Config.Target == 'qb' then
+    exports['qb-target']:AddTargetModel(dumpsters, {
+        options = {
+            {
+                type = "client",
+                event = "sfrp-hideintrash:client:enterTrash",
+                icon = "fas fa-trash",
+                label = "Hide in Trash",
             },
-            distance = 2.5,
-        })
-    elseif Config.Target == 'ox' then
-        exports['ox_target']:addModel(dumpsters, {
-            options = {
-                {
-                    name = "hide",
-                    label = "Hide In Dumpster",
-                    icon = "fa-solid fa-trash",
-                    event = "sfrp-hideintrash:client:enterTrash",
-                    distance = 2.0,
-                }
-            }
-        })
-    end
-end)
+        },
+        distance = 2.5,
+    })
+elseif Config.Target == 'ox' then
+    ox_target:addModel(dumpsters, {
+        {
+            name = 'dumpster',
+            event = 'sfrp-hideintrash:client:enterTrash',
+            icon = 'fas fa-trash',
+            label = "Hide in Trash",
+        }
+    })
+end
 
 RegisterNetEvent('sfrp-hideintrash:client:enterTrash', function()
     if isInTrash then
@@ -78,6 +70,7 @@ RegisterNetEvent('sfrp-hideintrash:client:enterTrash', function()
 
         LoadAnimDict(Config.Scenario)
         TaskPlayAnim(playerPed, Config.Scenario, Config.ScenarioType, 8.0, -8.0, -1, 1, 0, false, false, false)
+
 
         if Config.Notify == 'qb' then
             QBCore.Functions.Notify('You are hiding in the trash.', 'success')
