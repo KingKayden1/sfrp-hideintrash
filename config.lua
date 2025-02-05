@@ -1,33 +1,40 @@
 Config = {}
 
+Config.Enabled = true
+Config.Print = 'Set Config.Enabled To TRUE'
+
 Config.Dumpster = {
     `prop_dumpster_01a`,
     `prop_dumpster_02a`,
     `prop_dumpster_02b`,
     `prop_dumpster_4a`,
-    `prop_dumpster_4b`,
+    `prop_dumpster_4b`
 }
 
-Config.Target = 'qb' -- qb or ox
+Config.Framework = {
+    target = 'qb',
+    notify = 'qb'
+}
 
-Config.Notify = 'qb'  -- qb or ox
+Config.Suffocation = {
+    enabled = true,              -- Enable or disable suffocation
+    timeBeforeSuffocation = 60,  -- Time (seconds) before suffocation starts
+    damagePerTick = 10,           -- Damage applied per tick
+    tickRate = 3                -- Time (seconds) between each damage tick
+}
 
+Config.DrawText = {
+    native = true,
+    text = '[E] To Leave',
+    qbcore = {
+        position = 'left',
+    }
+}
 
-------------------------------------------------------------- ONLY TOUCH IF YOU KNOW WHAT YOURE DOING
-
---   https://forge.plebmasters.de/animations/anim@amb@nightclub@lazlow@lo_alone@@lowalone_base_laz?ped=A_F_Y_Beach_01
-Config.Scenario = 'anim@amb@nightclub@lazlow@lo_alone@'
-Config.ScenarioType = 'lowalone_base_laz'
-
-
------------------------------------     What Im Working On 
-
---[[
-
-Better way to get out of the dumpster
-
-Maybe Sound Effects When Your In The Dumpster
-
-Let me know by starring the github if I should focus more on this script
-
-]]
+Config.Enter = {
+    invisibility = true,
+    animation = {
+        scenario = 'anim@amb@nightclub@lazlow@lo_alone@',
+        scenarioType = 'lowalone_base_laz'
+    }
+}
